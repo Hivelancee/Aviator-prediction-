@@ -1,0 +1,54 @@
+
+import random
+from datetime import datetime, timedelta
+
+class AviatorPredictor:
+    def __init__(self):
+        self.predictions = []
+
+    def generate_predictions(self, num_predictions=10):
+        self.predictions = []
+        for _ in range(num_predictions):
+            # Generate a random multiplier between 1.2 and 5.0
+            multiplier = round(random.uniform(1.2, 5.0), 2)
+            self.predictions.append(multiplier)
+
+    def get_daily_predictions(self):
+        if not self.predictions:
+            self.generate_predictions()
+        return self.predictions
+
+def simulate_game(prediction):
+    # Simulate game outcome
+    actual_multiplier = round(random.uniform(1.0, 10.0), 2)
+    return actual_multiplier >= prediction
+
+def main():
+    predictor = AviatorPredictor()
+    
+    print("Aviator Prediction Model Simulation")
+    print("-----------------------------------")
+    
+    # Simulate predictions for 7 days
+    for day in range(1, 8):
+        date = datetime.now() + timedelta(days=day)
+        print(f"\nPredictions for {date.strftime('%Y-%m-%d')}:")
+        
+        daily_predictions = predictor.get_daily_predictions()
+        wins = 0
+        
+        for i, prediction in enumerate(daily_predictions, 1):
+            result = simulate_game(prediction)
+            outcome = "Win" if result else "Loss"
+            if result:
+                wins += 1
+            print(f"  Prediction {i}: {prediction}x - {outcome}")
+        
+        accuracy = (wins / len(daily_predictions)) * 100
+        print(f"\nDaily Accuracy: {accuracy:.2f}% ({wins}/{len(daily_predictions)} correct)")
+        
+        # Generate new predictions for the next day
+        predictor.generate_predictions()
+
+if __name__ == "__main__":
+    main()
